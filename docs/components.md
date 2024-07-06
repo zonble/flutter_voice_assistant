@@ -99,6 +99,57 @@ class DialogEnginePlayingTts extends DialogEngineState {
 
 ```
 
-## Interface 設計
+## 介面設計
 
-我們可以使用的各種 ASR、NLU、NLG、TTS 的服務非常多，除了各種已有的選擇之外，我們甚至可能會開發自己的服務，像是在我們自己的伺服器上放置我們自己調整過的模型。從開發對話引擎的角度來看，我們便應該專注於介面，而非個別服務的實作，我們只需要知道 ASR、NLU…每個引擎所具備的能力，
+我們可以使用的各種 ASR、NLU、NLG、TTS 的服務非常多，除了各種已有的選擇之外，我們甚至可能會開發自己的服務，像是在我們自己的伺服器上放置我們自己調整過的模型。從開發對話引擎的角度來看，我們便應該專注於介面，而非個別服務的實作，我們只需要知道 ASR、NLU…每個引擎所具備的能力，而我們的對話引擎大概會像這樣：
+
+- 有 ASR、NLU、NLG、TTS 四個引擎的實例
+- 有可以讓外部監聽的狀態
+- 有可以讓外部設定的對話流程
+
+```dart
+class DialogEngine implements VuiFlowDelegate {
+  final AsrEngine asrEngine;
+  final TtsEngine ttsEngine;
+  final NluEngine nluEngine;
+  final NlgEngine nlgEngine;
+
+  final StreamController<DialogEngineState> _stateStream = StreamController();
+  DialogEngineState _state = DialogEngineIdling();
+  DialogEngineState get state => _state;
+  Stream<DialogEngineState> get stateStream => _stateStream.stream;
+
+  Map<String, VuiFlow> _vuiFlowMap = {};
+}
+```
+
+### ASR
+
+我們定義的 ASR 引擎像這樣：
+
+```dart
+enum AsrEngineState {
+  listening,
+  notListening,
+  done,
+}
+
+abstract class AsrEngine {
+  Future<bool> init();
+  Future<bool> startRecognition();
+  Future<bool> stopRecognition();
+  Future<void> setLanguage(String language);
+
+  Function(String, bool)? onResult;
+  Function(AsrEngineState)? onStatusChange;
+  Function(dynamic)? onError;
+  bool get isInitialized;
+}
+
+```
+
+### NLU
+### NLG
+### TTS
+
+
