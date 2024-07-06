@@ -40,5 +40,6 @@ theme:
 
 nav:
   - "index.md"
+  - "chatbot_vs_assistant.md"
   - "components.md"
   - "packages.md"
