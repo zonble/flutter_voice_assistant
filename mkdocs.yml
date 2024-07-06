@@ -42,4 +42,5 @@ nav:
   - "index.md"
   - "chatbot_vs_assistant.md"
   - "components.md"
+  - "nlg_nlg_gemini.md"
   - "packages.md"
