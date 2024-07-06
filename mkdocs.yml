@@ -1,0 +1,44 @@
+site_name: 使用 Flutter 打造語音助理
+copyright: 2024 and onwards © Weizhong Yang a.k.a zonble
+theme:
+  name: material
+  language: "zh-TW"
+  # custom_dir: custom_theme/
+  palette:
+    - scheme: default
+      primary: blue grey
+      toggle:
+        name: Switch to light mode
+        icon: material/weather-sunny
+    - scheme: slate
+      primary: blue grey
+      # accent: pink
+      toggle:
+        name: Switch to dark mode
+        icon: material/weather-night
+  font:
+    text: Lato
+  features:
+    - navigation.sections
+    - navigation.tracking
+    - navigation.instant
+
+
+
+# plugins:
+#   - social:
+#       cards_font: Noto Sans TC
+#   - with-pdf:
+#       copyright: 2024 © 楊維中 a.k.a zonble
+#       author: 楊維中 a.k.a zonble
+#       # cover_subtitle: …防區狀況三即將生效，目的就是要驗證精實案後，防區各部隊已經成為量小、質精、戰力強的新一代鋼鐵勁旅。
+#       toc_title: 目錄
+#       # custom_template_path: custom_theme_pdf
+#       output_path: flutter_voice_assistant.pdf
+#       # debug_html: true
+
+
+nav:
+  - "index.md"
+  - "components.md"
+  - "packages.md"
