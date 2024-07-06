@@ -2,6 +2,9 @@
 
 2024 © Weizhong Yang a.k.a zonble
 
+![封面](images/cover.jpg)
+
+
 這幾年語音助理應用以各種方式走入了每個人的生活。蘋果在 iPhone 4 之後加入了 Siri 功能，也應用在 Apple TV、HomePod 等產品上，Amazon 打造了 Alexa 智慧喇叭，Google 則在 Android 手機與 Google Nest 等裝置上加入了 Google Assistant 功能，之後又有更多的智慧喇叭以及車載語音產品。這些語音助理的功能不僅僅是回答問題，還能夠控制家電、播放音樂、設定鬧鐘等等。
 
 我們可以注意到，這些語音助理有一個共同的特色，就是他們都有自己的生態系統。這些語音助理首先串接的是自家的服務，而幾乎每家都有自己的音樂、地圖導航等。蘋果就有自家的 Apple Music、Amazon 也有自己的 Prime Music、Google 則有 YouTube Music；地圖方面，蘋果一開始與 Google合作使用 Google Maps，後來也開發了自家的 Apple Maps。或著，就是與一些最大的音樂、氣象、新聞等服務合作，像是 Spotify、Weather.com 等等。
