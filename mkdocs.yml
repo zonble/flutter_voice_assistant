@@ -31,6 +31,7 @@ markdown_extensions:
 
 
 plugins:
+  - search
   # - social:
   #     cards_font: Noto Sans TC
   # - with-pdf:
