@@ -26,9 +26,7 @@ theme:
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
-  - pymdownx.superfences 
-
-
+  - pymdownx.superfences
 
 plugins:
   - search
@@ -48,12 +46,13 @@ plugins:
       puml_keyword: puml
       verify_ssl: true
 
-
 nav:
   - "index.md"
   - "chatbot_vs_assistant.md"
   - "components.md"
   - "packages.md"
   - "nlg_nlg_gemini.md"
+  - "asr_tts_engine.md"
   - "vui_flow_design.md"
   - "vui_flow_impl.md"
+  - "next_steps.md"
