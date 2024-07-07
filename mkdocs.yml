@@ -23,6 +23,11 @@ theme:
     - navigation.tracking
     - navigation.instant
 
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences 
+
 
 
 plugins:

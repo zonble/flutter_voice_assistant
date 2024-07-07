@@ -1,5 +1,7 @@
 # 語音助理的基本組成
 
+![封面](images/components.jpg)
+
 在這邊需要介紹一些專有名詞。一套語音助理系統的組成，通常會包括—ASR、NLU、NLG、TTS 等，在一個完整的語音互動中，扮演各自的角色。
 
 - ASR：Automatic Speech Recognition，自動語音識別，又稱為 STR （Speech-to-Text），負責將語音訊號轉換為文字。對於行動開發者來說，應該清楚蘋果提供了 [Sppech](https://developer.apple.com/documentation/speech) 框架，在 Android 系統中也有 [SpeechRecognizer](https://developer.android.com/reference/android/speech/SpeechRecognizer) 可用，在瀏覽器中也一樣有 [SpeechRecognition](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition)。除此之外，許多雲端服務，像是 Google Cloud 與 Azure，也具備將上傳的語音資料轉換成文字的服務。
@@ -101,7 +103,7 @@ class DialogEnginePlayingTts extends DialogEngineState {
 
 ## 介面設計
 
-我們可以使用的各種 ASR、NLU、NLG、TTS 的服務非常多，除了各種已有的選擇之外，我們甚至可能會開發自己的服務，像是在我們自己的伺服器上放置我們自己調整過的模型。從開發對話引擎的角度來看，我們便應該專注於介面，而非個別服務的實作，我們只需要知道 ASR、NLU…每個引擎所具備的能力，而我們的對話引擎大概會像這樣：
+我們可以使用的各種 ASR、NLU、NLG、TTS 的服務非常多，除了各種已有的選擇之外，我們甚至可能會開發自己的服務，像是在我們自己的伺服器上放置我們自己調整過的模型。從開發對話引擎的角度來看，我們便應該專注於介面，而非個別服務的實作，我們只需要知道 ASR、NLU…每個引擎所具備的能力，之後可以隨時抽換實作。我們的對話引擎大概會像這樣：
 
 - 有 ASR、NLU、NLG、TTS 四個引擎的實例
 - 有可以讓外部監聽的狀態
@@ -148,8 +150,81 @@ abstract class AsrEngine {
 
 ```
 
+在 ASR 引擎的介面上，最主要的 method 就是初始化、開始辨識、停止辨識，以及設定語言。我們也提供了一些 callback，讓外部可以監聽 ASR 引擎的狀態。因為在開啟 ASR 引擎之前，可能需要做一些權限相關的設定，因此設計了一個初始化的 method，而在啟動 ASR 引擎之後，對話引擎就會進入 Listening 狀態，這時候就會開始接收語音輸入，透過 onResult 接收目前辨識出的文字。當用戶停止講話，或是 ASR 引擎辨識出一段語音，我們就會進入 Done 狀態，這時候就可以將辨識結果送到 NLU 引擎。
+
 ### NLU
+
+```dart
+class NluIntent {
+  final String intent;
+  final Map slots;
+
+  NluIntent({
+    required this.intent,
+    required this.slots,
+  });
+
+  factory NluIntent.fromMap(Map json) {
+    return NluIntent(
+      intent: json['intent'] ?? '',
+      slots: json['slots'] ?? [],
+    );
+  }
+}
+
+abstract class NluEngine {
+  Set<String> availableIntents = <String>{};
+  Set<String> availableSlots = <String>{};
+
+  Future<NluIntent> extractIntent(
+    String utterance, {
+    String? currentIntent,
+    String? additionalRequirement,
+  });
+}
+```
+
+如前所述，NLU 引擎的角色就是從文字抽取出意圖。所以我們在這邊定義了 `NluIntent` 物件，在這個物件中，包含被抽取出的意圖的代號，以及與這個意圖相關的 Slot—所謂的 Slot 就是意圖中的參數。例如「導航到動物園」這句話中，「導航」是用戶想要執行的意圖，而「動物園」就是這個意圖的 Slot。
+
+在 `NluEngine` 介面中，我們定義了一個 method `extractIntent`，這個 method 會接收一段文字，並且回傳一個 `NluIntent` 物件。在這個 method 中，我們也可以設定一些參數，像是目前的意圖、或是一些額外的需求，讓 NLU 引擎可以更好地抽取出意圖。像是，我們告訴 NLU 引擎我們想要哪些 NLU 意圖以及 Slot，就可以幫助他盡可能歸類到我們限制的分類中。
+
 ### NLG
+
+```dart
+abstract class NlgEngine {
+  Future<String?> generateResponse(
+    String utterance, {
+    bool useDefaultPrompt = true,
+    bool? preventMeaningLessMessage,
+  });
+}
+```
+
+NLG 的介面非常簡單，基本上就是將一段文字交給 NLG 引擎，並且回傳一段回應。在這個 method 中，我們也可以設定一些參數，像是是否使用預設的提示，或是是否要避免回傳無意義的訊息。
+
 ### TTS
 
+TTS 引擎所需要的介面，就是播放某個句子以及與停止播放。此外，我們通常需要能夠設定 TTS 引擎的語言、語速、音量、音高，以及聲音（男聲、女聲等）。我們另外設計了一些 callback，讓外部可以監聽 TTS 引擎的狀態。
 
+``` dart
+import 'dart:async';
+
+abstract class TtsEngine {
+  Future<void> playPrompt(String prompt);
+  Future<void> stopPlaying();
+  Future<void> setLanguage(String language);
+  Future<void> setSpeechRate(double rate);
+  Future<void> setVolume(double volume);
+  Future<void> setPitch(double pitch);
+  Future<void> setVoice(Map<String, String> voice);
+
+  Function()? onStart;
+  Function()? onComplete;
+  Function(String text, int startOffset, int endOffset, String word)?
+      onProgress;
+  Function(String msg)? onError;
+  Function()? onCancel;
+  Function()? onPause;
+  Function()? onContinue;
+}
+```
