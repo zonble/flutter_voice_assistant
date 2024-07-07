@@ -176,7 +176,7 @@ class GeminiNlgEngine extends NlgEngine {
       prompt = 'Create a response for the sentence:\n\n$utterance\n\n';
       prompt += 'The response should be less than 30 words.\n';
       prompt += 'The response should not be another question.\n';
-      prompt += 'The response should contain emoji.\n';
+      prompt += 'The response should not contain emoji.\n';
       if (preventMeaningLessMessage == true) {
         prompt += 'If the sentence is lacking of context.'
             ' Just say you do not understand'
@@ -190,3 +190,5 @@ class GeminiNlgEngine extends NlgEngine {
   }
 }
 ```
+
+我們通常需要告訴 Gemini 不要在回應中使用顏文字，不然 TTS 會把這些顏文字一起念出來，效果會很奇怪。

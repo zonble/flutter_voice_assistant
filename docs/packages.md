@@ -8,6 +8,7 @@
 - [google_speech](https://pub.dev/packages/google_speech)：使用 Google 雲端服務的語音辨識套件。
 - [azure_speech_recognition_null_safety](https://pub.dev/packages/azure_speech_recognition_null_safety)：使用 Azure 雲端服務的語音辨識套件。
 - [openai_api](https://pub.dev/packages/openai_api)：當中包含了 OpenAI 的語音辨識服務。
+- [dart_openai](https://pub.dev/packages/dart_openai)：另外一套 OpenAI API 的實作。
 - [ifly_speech_recognition](https://pub.dev/packages/ifly_speech_recognition)：科大訊飛是一家對岸的語音服務公司，也提供了連接他們的服務的 Flutter 套件。
 
 在使用這些套件時，往往還需要一些額外的權限與隱私設定。像是 iOS 上可能需要在 Info.plist 中設定 `NSMicrophoneUsageDescription` 與 `NSSpeechRecognitionUsageDescription`，告知用戶為什麼要使用麥克風與語音辨識權限。而在 Android 上，可能需要在 AndroidManifest.xml 中設定 `RECORD_AUDIO` 權限，而如果我們想要用藍芽裝置錄音，那可能還要額外設定 `BLUETOOTH` 權限。使用時請先看這些套件的說明。

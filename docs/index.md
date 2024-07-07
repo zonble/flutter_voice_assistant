@@ -1,13 +1,12 @@
 # 前言
 
-2024 © Weizhong Yang a.k.a zonble
+2024 and onwards © Weizhong Yang a.k.a zonble
 
 ![封面](images/cover.jpg)
 
-
 這幾年語音助理應用以各種方式走入了每個人的生活。蘋果在 iPhone 4 之後加入了 Siri 功能，也應用在 Apple TV、HomePod 等產品上，Amazon 打造了 Alexa 智慧喇叭，Google 則在 Android 手機與 Google Nest 等裝置上加入了 Google Assistant 功能，之後又有更多的智慧喇叭以及車載語音產品。這些語音助理的功能不僅僅是回答問題，還能夠控制家電、播放音樂、設定鬧鐘等等。
 
-我們可以注意到，這些語音助理有一個共同的特色，就是他們都有自己的生態系統。這些語音助理首先串接的是自家的服務，而幾乎每家都有自己的音樂、地圖導航等。蘋果就有自家的 Apple Music、Amazon 也有自己的 Prime Music、Google 則有 YouTube Music；地圖方面，蘋果一開始與 Google合作使用 Google Maps，後來也開發了自家的 Apple Maps。或著，就是與一些最大的音樂、氣象、新聞等服務合作，像是 Spotify、Weather.com 等等。
+我們可以注意到，這些語音助理有一個共同的特色，就是他們都有自己的生態系統。這些語音助理首先串接的是自家的服務，而幾乎每家都有自己的音樂、地圖導航等。蘋果就有自家的 Apple Music、Amazon 也有自己的 Prime Music、Google 則有 YouTube Music；地圖方面，蘋果一開始與 Google 合作使用 Google Maps，後來也開發了自家的 Apple Maps。或著，就是與一些最大的音樂、氣象、新聞等服務合作，像是 Spotify、Weather.com 等等。
 
 為了擴大生態圈，第三方開發者也可以為這些語音助理開發自己的服務，像是 iOS App 的開發者可以透過[SiriKit](https://developer.apple.com/documentation/sirikit/)，為 Siri 增加功能，讓 Siri 可以串接到 App 的功能。Amazon 則提供了 Amazon 則使用 [Alexa Skills](https://www.amazon.com/-/alexa-skills/b?node=13727921011)，Google 則使用 Actions on Google 來串接各種第三方服務。而由於這些語音助理都是大眾導向的產品，大多建立在這些平台上的服務，也往往是大眾導向的服務，我們還是較少能看到在一些內部、或是專屬的系統上，使用語音助理技術或功能。
 
@@ -25,7 +24,6 @@
 </video>
 
 隨著這幾年 Flutter 應用程式的開發框架愈來愈成熟，加上大型語言模型（LLM）也快速普及，結合這兩者，其實就可以快速打造跨平台的語音助理。在這本小冊子中，會提到:
-
 
 - 打造語音助理需要哪些元件
 - 這些元件有哪些可用的 Flutter 套件
