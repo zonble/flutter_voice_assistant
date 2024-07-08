@@ -88,7 +88,36 @@ end
 - 我想要去台北動物園
 - 帶我去動物園，不要上高架橋…
 
+在上圖中，可以注意到，其實這張圖是多個 VUI Flow 組成的，中間有一段確認是否要終止導航的流程，就是以「確認」、「取消」等意圖，開啟一段新的 VUI Flow。
+
+這個時候，通常會預期只會收到在限制範圍內的意圖，但使用者的行為可能千奇百怪—舉另外一個例子，如果是一套點餐系統，當用戶說「我要點餐」時，我們可能會回應「您想點什麼」，並且預期收到「我要一碗牛肉麵」這樣的回答，但用戶可能會說「有什麼可以點的」，這時候我們可能選擇回覆「我們不理解你的意圖」，或是必須再設計一條分支，念出一些熱門的餐點，然後再問一次想點什麼餐點。流程應該怎麼設計，最後還是要回歸使用者到底怎麼使用，以及團隊的使用者研究的結果。
+
 ## VUI Flow 的介面
+
+在實際進入撰寫 VUI Flow 之前，我們先設計一個屬於所有 VUI Flow 的介面。
+
+```dart
+abstract class VuiFlow {
+  Future<void> handle(NluIntent intent);
+
+  Future<void> cancel() async {
+    delegate = null;
+  }
+
+  VuiFlowDelegate? delegate;
+  String get intent => '';
+  List<String> get slots => [];
+  String? get additionalNluPrompt => null;
+}
+```
+
+這個介面分成三個部分：
+
+- 這個 VUI Flow 實際上的工作：當我們要使用這個 VUI Flow 時，會去呼叫 `handle` 這個 method
+- 這個 VUI Flow 所需要的外部相依：集中在 delegate 中
+- 其他的 metadata：包括什麼意圖會進入這個 VUI Flow，期待收到哪些 Slot，以及是否需要額外的 LLM Prompt 協助抽取 Slot
+
+在 delegate 中，我們定義了一個 VUI Flow 怎麼在中途使用 TTS 引擎與 NLG 引擎，而如果他需要進入另外一輪的對話，可以用 `onSettingCurrentVuiFlow` 指定下一個 VUI Flow 是什麼，並且用 `onStartingAsr` 重新開始 ASR 識別。另外，就是一個用來結束對話的 `onEndingConversation`。
 
 ```dart
 abstract class VuiFlowDelegate {
@@ -100,3 +129,7 @@ abstract class VuiFlowDelegate {
       {bool useDefaultPrompt = true});
 }
 ```
+
+另外，使用者可能隨時取消目前正在進行中的 VUI Flow，像是在執行到一半的時候，就按下退出語音助理的按鈕，不但直接關閉 ASR 識別與 TTS 語音，也需要取消正在 `handle` method 中執行的工作。如果要做完整的取消的話，那每個 VUI Flow 中，都需要一個叫做 cancelled 的變數，當這個變數為 true 時，`handle` 裡頭每一行，都要檢查 cancelled 是不是已經變成 true，如果是，就要退出。
+
+在這邊先用了一個偷懶的辦法：只要把 delegate 設成 null 之後，這個 VUI Flow 就不會有對外的聯繫。也不會繼續有 ASR 識別與 TTS 語音，不過 `handle` 其實還是會繼續往下執行。

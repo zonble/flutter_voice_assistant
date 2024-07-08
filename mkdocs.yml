@@ -39,11 +39,9 @@ plugins:
   # - with-pdf:
   #     copyright: 2024 © 楊維中 a.k.a zonble
   #     author: 楊維中 a.k.a zonble
-  #     # cover_subtitle: …防區狀況三即將生效，目的就是要驗證精實案後，防區各部隊已經成為量小、質精、戰力強的新一代鋼鐵勁旅。
+  #     cover_subtitle: 以 Gemini 為基礎的語音助理
   #     toc_title: 目錄
-  #     # custom_template_path: custom_theme_pdf
   #     output_path: flutter_voice_assistant.pdf
-  #     # debug_html: true
   - plantuml:
       puml_url: https://www.plantuml.com/plantuml/
       num_workers: 8
