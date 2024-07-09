@@ -262,12 +262,13 @@ class DialogEngine implements VuiFlowDelegate {
     );
 
     final completer = Completer();
-    var systemCallCalled = true;
+    var systemCallCalled = false;
     engine.registerFlows([
       LeaveApplicationVuiFlow(
           onMakingLeaveApplication: (reason, date, text) async {
         expect(date, '明天下午');
         expect(reason, '出去玩');
+        systemCallCalled = true;
         completer.complete();
         return true;
       })
