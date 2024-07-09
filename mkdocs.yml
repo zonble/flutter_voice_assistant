@@ -3,10 +3,11 @@ site_url: https://zonble.github.io/flutter_voice_assistant
 repo_url: https://github.com/zonble/flutter_voice_assistant
 repo_name: zonble/flutter_voice_assistant
 copyright: 2024 and onwards © Weizhong Yang a.k.a zonble
+site_description: 使用 Flutter 所提供的套件以及 Gemini 打造自己的語音助理
 theme:
   name: material
   language: "zh-TW"
-  # custom_dir: custom_theme/
+  custom_dir: custom_theme/
   palette:
     - scheme: default
       primary: white
@@ -31,19 +32,25 @@ theme:
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
   - pymdownx.superfences
   - footnotes
 
 plugins:
-  # - social:
-  #     cards_font: Noto Sans TC
   - search
+  - social:
+      cards_layout_options:
+        font_family: Noto Sans TC
   - with-pdf:
       copyright: 2024 © 楊維中 a.k.a zonble
       author: 楊維中 a.k.a zonble
-      cover_subtitle: 以 Gemini 為基礎的語音助理
+      cover_subtitle: 使用 Flutter 所提供的套件以及 Gemini 打造自己的語音助理
       toc_title: 目錄
       output_path: flutter_voice_assistant.pdf
+      debug_html: true
   - plantuml:
       puml_url: https://www.plantuml.com/plantuml/
       num_workers: 8

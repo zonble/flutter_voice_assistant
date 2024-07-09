@@ -70,3 +70,8 @@ pre {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
+code,
+code span {
+  font-size: 10pt;
+}
