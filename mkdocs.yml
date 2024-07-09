@@ -10,12 +10,14 @@ theme:
   palette:
     - scheme: default
       primary: white
+      accent: pink
+
       toggle:
         name: Switch to light mode
         icon: material/weather-sunny
     - scheme: slate
-      primary: grey
-      # accent: pink
+      primary: black
+      accent: pink
       toggle:
         name: Switch to dark mode
         icon: material/weather-night
