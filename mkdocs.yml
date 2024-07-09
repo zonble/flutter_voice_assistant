@@ -34,19 +34,32 @@ markdown_extensions:
 
 plugins:
   - search
-  # - social:
-  #     cards_font: Noto Sans TC
-  # - with-pdf:
-  #     copyright: 2024 © 楊維中 a.k.a zonble
-  #     author: 楊維中 a.k.a zonble
-  #     cover_subtitle: 以 Gemini 為基礎的語音助理
-  #     toc_title: 目錄
-  #     output_path: flutter_voice_assistant.pdf
+  - social:
+      cards_font: Noto Sans TC
+  - with-pdf:
+      copyright: 2024 © 楊維中 a.k.a zonble
+      author: 楊維中 a.k.a zonble
+      cover_subtitle: 以 Gemini 為基礎的語音助理
+      toc_title: 目錄
+      output_path: flutter_voice_assistant.pdf
   - plantuml:
       puml_url: https://www.plantuml.com/plantuml/
       num_workers: 8
       puml_keyword: puml
       verify_ssl: true
+
+extra_css:
+  - css/extra.css
+  - css/pdf-print.css
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/zonble
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/zonble
+  search:
+    language: "jp"
 
 nav:
   - "index.md"
