@@ -32,7 +32,7 @@
 
 我預期您在閱讀這本小冊子之前，具備一定的 Flutter 應用程式的開發基礎與經驗。這本小冊子放在 Github 上，如果您發現錯漏，可以直接在 Github 上發 PR 修正，或是在 Github 上開 Issue 討論。因為內容也是以 Git 管理，因此不額外提供版本歷史。
 
-這本小冊子當中的程式碼，也可以從 [flutter_voice_assistant](https://zonble.github.io/flutter_voice_assistant/) 處取得。
+這本小冊子當中的程式碼，也可以從 [flutter_dialog](https://github.com/zonble/flutter_dialog) 處取得。
 
 本書內容以 CC BY-SA 4.0 授權條款釋出。
 
