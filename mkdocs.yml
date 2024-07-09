@@ -9,12 +9,12 @@ theme:
   # custom_dir: custom_theme/
   palette:
     - scheme: default
-      primary: blue grey
+      primary: white
       toggle:
         name: Switch to light mode
         icon: material/weather-sunny
     - scheme: slate
-      primary: blue grey
+      primary: grey
       # accent: pink
       toggle:
         name: Switch to dark mode
@@ -58,5 +58,6 @@ nav:
   - "vui_flow_design.md"
   - "vui_flow_impl.md"
   - "dialog_engine.md"
+  - "confirm_cancel.md"
   - "challenges.md"
   - "next_steps.md"
