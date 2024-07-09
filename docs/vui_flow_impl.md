@@ -94,7 +94,7 @@ class LeaveApplicationVuiFlow extends VuiFlow {
   }
 ```
 
-在這一部分，我們首先確認，是不是在 intent 中，以及在 LeaveApplication 物件上，已經有了 date 與 errorCount 加一，數量到了一定程度後，就走入 `handleMaxError`。不然，就把 LeaveApplicationVuiFlow 拷貝一份（先忽略 onMakingLeaveApplication），然後把現在的 date、reason 與 errorCount 複製上去，然後告訴 delegate，這就是下一輪對話使用的 VUI Flow，收到任何意圖就要傳到這個 VUI Flow，然後重新開始 ASR 識別。
+在這一部分，我們首先確認，是不是在 intent 中，以及在 LeaveApplication 物件上，已經有了 date 與 errorCount 加一，數量到了一定程度後，就走入 `handleMaxError`。不然，就把 LeaveApplicationVuiFlow 拷貝一份（先忽略 onMakingLeaveApplication），然後把現在的 date、reason 與 errorCount 複製上去，然後告訴 delegate，這就是下一輪對話使用的 VUI flow，收到任何意圖就要傳到這個 VUI flow，然後重新開始 ASR 識別。
 
 ## 使用 NLG 引擎
 
@@ -127,7 +127,7 @@ class LeaveApplicationVuiFlow extends VuiFlow {
 
 ## 設計 System Call
 
-前面所出現的 `onMakingLeaveApplication`，就是這個 VUI Flow 用來呼叫外部的 System Call，所以我們只要再這個 class 當中定義一個匿名函式
+前面所出現的 `onMakingLeaveApplication`，就是這個 VUI flow 用來呼叫外部的 System Call，所以我們只要再這個 class 當中定義一個匿名函式
 
 ```dart
 class LeaveApplicationVuiFlow extends VuiFlow {
@@ -188,7 +188,7 @@ class LeaveApplicationMockDelegate extends VuiFlowDelegate {
 接著就可以寫測試了：
 
 ```dart
-  test('Test Leave Application VUI Flow - with slots', () async {
+  test('Test Leave Application VUI flow - with slots', () async {
     final delegate = LeaveApplicationMockDelegate();
     var systemCallCalled = false;
     final vuiFlow = LeaveApplicationVuiFlow(
@@ -210,7 +210,7 @@ class LeaveApplicationMockDelegate extends VuiFlowDelegate {
   });
 ```
 
-這個 test case 中，我們只測試了一種狀況，就是用戶一開始就說清楚了請假的事由與日期，然後看看最後的 TTS 對不對，以及最後請假用的 System Call 是否被呼叫了。實務上，這樣的測試只考慮的一個情境，沒有考慮少了某個 slot ，或是一開始就已經在上一輪對話中得到了 slot 的狀況，還需要更多的 case 才能完全覆蓋——在這些 case 中，則需要 assert 是否提供了用做下一輪對話的 VuiFlow 物件，但是因為篇幅的關係，不在此贅述。
+這個 test case 中，我們只測試了一種狀況，就是使用者一開始就說清楚了請假的事由與日期，然後看看最後的 TTS 對不對，以及最後請假用的 System Call 是否被呼叫了。實務上，這樣的測試只考慮的一個情境，沒有考慮少了某個 slot ，或是一開始就已經在上一輪對話中得到了 slot 的狀況，還需要更多的 case 才能完全覆蓋——在這些 case 中，則需要 assert 是否提供了用做下一輪對話的 VuiFlow 物件，但是因為篇幅的關係，不在此贅述。
 
 ## 實際使用 System Call
 

@@ -5,7 +5,7 @@
 在這邊需要介紹一些專有名詞。一套語音助理系統的組成，通常會包括—ASR、NLU、NLG、TTS 等，在一個完整的語音互動中，扮演各自的角色。
 
 - ASR：Automatic Speech Recognition，自動語音識別，又稱為 STR （Speech-to-Text），負責將語音訊號轉換為文字。對於行動開發者來說，應該清楚蘋果提供了 [Sppech](https://developer.apple.com/documentation/speech) 框架，在 Android 系統中也有 [SpeechRecognizer](https://developer.android.com/reference/android/speech/SpeechRecognizer) 可用，在瀏覽器中也一樣有 [SpeechRecognition](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition)。除此之外，許多雲端服務，像是 Google Cloud 與 Azure，也具備將上傳的語音資料轉換成文字的服務。
-- NLU：Natural Language Understanding，自然語言理解，負責從文字中抽取出意圖，像是知道使用者想要做什麼事情，想要問什麼問題，也可以分析用戶所說的話當中的情緒（悲傷、高興、憤怒），或是口吻是正式還是輕鬆等。在行動開發的框架中，通常沒有這部份的框架，但是所有的交談型 LLM 都一定包含 NLU 的能力。此外，比較有名的 NLU 引擎包括 [Google Dialogflow](https://cloud.google.com/dialogflow/docs/)、[Microsoft LUIS](https://learn.microsoft.com/en-us/azure/ai-services/luis/)、[IBM Watson](https://www.ibm.com/products/natural-language-understanding)、[Nuance Recognizer](https://www.nuance.com/omni-channel-customer-engagement/contact-center-ai/nuance-recognizer.html) 等等。
+- NLU：Natural Language Understanding，自然語言理解，負責從文字中抽取出意圖，像是知道使用者想要做什麼事情，想要問什麼問題，也可以分析使用者所說的話當中的情緒（悲傷、高興、憤怒），或是口吻是正式還是輕鬆等。在行動開發的框架中，通常沒有這部份的框架，但是所有的交談型 LLM 都一定包含 NLU 的能力。此外，比較有名的 NLU 引擎包括 [Google Dialogflow](https://cloud.google.com/dialogflow/docs/)、[Microsoft LUIS](https://learn.microsoft.com/en-us/azure/ai-services/luis/)、[IBM Watson](https://www.ibm.com/products/natural-language-understanding)、[Nuance Recognizer](https://www.nuance.com/omni-channel-customer-engagement/contact-center-ai/nuance-recognizer.html) 等等。
 - NLG：Natural Language Generation，自然語言生成，負責產生對特定文字的回覆。其實各種 LLM，就是在擔任 NLG 引擎的工作。
 - TTS：Text-to-Speech。負責將文字轉換為語音。在行動開發者的框架中，蘋果提供了 [AVSpeechSynthesizer](https://developer.apple.com/documentation/avfoundation/avspeechsynthesizer)、Google 提供了 [TextToSpeech](https://developer.android.com/reference/android/speech/tts/TextToSpeech)。在瀏覽器中，也有 [SpeechSynthesis](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) 可用。雲端服務中，像是 Google Cloud 與 Azure 也提供了將文字轉換成語音的服務。
 
@@ -47,7 +47,7 @@ end
 @enduml
 ```
 
-在上圖中，多了一個叫做「對話引擎」的角色，也就是我們需要自行開發的部分。對話引擎需要負責管理一份對應表格（mapping），將各種從 NLU 引擎抽取出的意圖，對應到我們的語音助手可以執行的工作上。如果不能處理這項工作（像用戶只說了「你好」，但是我們沒辦法用「你好」這句話決定可以做什麼事），我們可以有幾個選擇，或是就直接用 TTS 告訴用戶我們不理解你的意圖，或是就由 NLU 引擎產生一個回答，這樣會讓用戶感到比較親切。
+在上圖中，多了一個叫做「對話引擎」的角色，也就是我們需要自行開發的部分。對話引擎需要負責管理一份對應表格（mapping），將各種從 NLU 引擎抽取出的意圖，對應到我們的語音助手可以執行的工作上。如果不能處理這項工作（像使用者只說了「你好」，但是我們沒辦法用「你好」這句話決定可以做什麼事），我們可以有幾個選擇，或是就直接用 TTS 告訴使用者我們不理解你的意圖，或是就由 NLU 引擎產生一個回答，這樣會讓使用者感到比較親切。
 
 至於是可以執行的工作，就會走入一套我們設計好的對話流程。我們在後面再詳細討論。
 
@@ -56,19 +56,19 @@ end
 從以上的流程圖中，我們也可以發現，對話引擎擁有以下幾種狀態：
 
 - 閒置狀態：也是語音助理的初始狀態。
-- 聆聽/辨識狀態：用戶從 App 啟動了麥克風，對系統輸入語音資料，同時 ASR 引擎也在嘗試辨識語音。通常等到用戶停止講話一陣子，我們架設用戶已經把想講的話說完，我們就會進入下一個狀態。而如果在一段時間內，用戶什麼話都沒說，或是沒有任何 ASR 辨識結果，我們也會離開這個狀態，回到閒置狀態，我們也可能用 TTS 提示用戶「我不能理解你的意思」。
-- 處理狀態：我們將 ASR 辨識結果送到 NLU 引擎後，NLU 引擎往往需要一段時間分析，我們也往往需要獲得一些其他的資訊，才知道對話應該如何繼續進行。這段時間，我們通常會在 App 上顯示一個等待的畫面，或是用 TTS 提示用戶「我正在處理你的要求」。
-- TTS 播報狀態：當我們用 TTS 回應用戶時，我們會進入這個狀態。這個狀態通常會持續一段時間，直到 TTS 播報完畢，我們才會回到閒置狀態。或是，如果我們需要繼續追問用戶，我們會回到聆聽/辨識狀態。
+- 聆聽/辨識狀態：使用者從 App 啟動了麥克風，對系統輸入語音資料，同時 ASR 引擎也在嘗試辨識語音。通常等到使用者停止講話一陣子，我們架設使用者已經把想講的話說完，我們就會進入下一個狀態。而如果在一段時間內，使用者什麼話都沒說，或是沒有任何 ASR 辨識結果，我們也會離開這個狀態，回到閒置狀態，我們也可能用 TTS 提示使用者「我不能理解你的意思」。
+- 處理狀態：我們將 ASR 辨識結果送到 NLU 引擎後，NLU 引擎往往需要一段時間分析，我們也往往需要獲得一些其他的資訊，才知道對話應該如何繼續進行。這段時間，我們通常會在 App 上顯示一個等待的畫面，或是用 TTS 提示使用者「我正在處理你的要求」。
+- TTS 播報狀態：當我們用 TTS 回應使用者時，我們會進入這個狀態。這個狀態通常會持續一段時間，直到 TTS 播報完畢，我們才會回到閒置狀態。或是，如果我們需要繼續追問使用者，我們會回到聆聽/辨識狀態。
 
 ```puml
 @startuml
 [*] --> Idling
 Idling -> Listening: 啟動語音助理
 Listening --> Idling: 沒有輸入
-Listening --> Processing: 用戶停止講話
+Listening --> Processing: 使用者停止講話
 Processing --> TtsPlaying: 播放 TTS 回應
 TtsPlaying --> Idling: 播放完畢
-TtsPlaying --> Listening: 播放完畢，但繼續追問用戶
+TtsPlaying --> Listening: 播放完畢，但繼續追問使用者
 @enduml
 ```
 
@@ -150,7 +150,7 @@ abstract class AsrEngine {
 
 ```
 
-在 ASR 引擎的介面上，最主要的 method 就是初始化、開始辨識、停止辨識，以及設定語言。我們也提供了一些 callback，讓外部可以監聽 ASR 引擎的狀態。因為在開啟 ASR 引擎之前，可能需要做一些權限相關的設定，因此設計了一個初始化的 method，而在啟動 ASR 引擎之後，對話引擎就會進入 Listening 狀態，這時候就會開始接收語音輸入，透過 onResult 接收目前辨識出的文字。當用戶停止講話，或是 ASR 引擎辨識出一段語音，我們就會進入 Done 狀態，這時候就可以將辨識結果送到 NLU 引擎。
+在 ASR 引擎的介面上，最主要的 method 就是初始化、開始辨識、停止辨識，以及設定語言。我們也提供了一些 callback，讓外部可以監聽 ASR 引擎的狀態。因為在開啟 ASR 引擎之前，可能需要做一些權限相關的設定，因此設計了一個初始化的 method，而在啟動 ASR 引擎之後，對話引擎就會進入 Listening 狀態，這時候就會開始接收語音輸入，透過 onResult 接收目前辨識出的文字。當使用者停止講話，或是 ASR 引擎辨識出一段語音，我們就會進入 Done 狀態，這時候就可以將辨識結果送到 NLU 引擎。
 
 ### NLU
 
@@ -184,7 +184,7 @@ abstract class NluEngine {
 }
 ```
 
-如前所述，NLU 引擎的角色就是從文字抽取出意圖。所以我們在這邊定義了 `NluIntent` 物件，在這個物件中，包含被抽取出的意圖的代號，以及與這個意圖相關的 Slot—所謂的 Slot 就是意圖中的參數。例如「導航到動物園」這句話中，「導航」是用戶想要執行的意圖，而「動物園」就是這個意圖的 Slot。
+如前所述，NLU 引擎的角色就是從文字抽取出意圖。所以我們在這邊定義了 `NluIntent` 物件，在這個物件中，包含被抽取出的意圖的代號，以及與這個意圖相關的 Slot—所謂的 Slot 就是意圖中的參數。例如「導航到動物園」這句話中，「導航」是使用者想要執行的意圖，而「動物園」就是這個意圖的 Slot。
 
 在 `NluEngine` 介面中，我們定義了一個 method `extractIntent`，這個 method 會接收一段文字，並且回傳一個 `NluIntent` 物件。在這個 method 中，我們也可以設定一些參數，像是目前的意圖、或是一些額外的需求，讓 NLU 引擎可以更好地抽取出意圖。像是，我們告訴 NLU 引擎我們想要哪些 NLU 意圖以及 Slot，就可以幫助他盡可能歸類到我們限制的分類中。
 

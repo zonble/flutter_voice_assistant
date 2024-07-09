@@ -240,3 +240,5 @@ class MockTtsEngine extends TtsEngine {
 }
 
 ```
+
+在後續章節[〈實作完整的對話引擎〉](dialog_engine.md)中，會說明如何使用這些 Mock 的 ASR 與 TTS 引擎。
