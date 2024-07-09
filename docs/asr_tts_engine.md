@@ -133,8 +133,8 @@ class PlatformTtsEngine extends TtsEngine {
 
   @override
   Future<void> playPrompt(String prompt) async {
-    var ttsCompleter = Completer();
     await flutterTTs.speak(prompt);
+    var ttsCompleter = Completer();
     _ttsCompleter = ttsCompleter;
     await ttsCompleter.future;
   }
