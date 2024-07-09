@@ -22,7 +22,7 @@
 
 如果使用者處在一個吵雜的環境中，那麼環境的噪音一定大大影響 ASR 的辨識結果。我們可以在產品設計上提出一些對使用者的要求，例如要使用指定型號的耳機或麥克風，甚至是特定的指向性麥克風陣列。
 
-或著，在一些系統中，我們可以透過設定一些系統消除噪音，以 iOS 為例，我們可以對 [AVAudioSession](https://developer.apple.com/documentation/avfaudio/avaudiosession) 設定不同的 [mode](https://developer.apple.com/documentation/avfaudio/avaudiosession/mode)，iOS 會在設定不同的 mode 之後，套用不同的消噪的演算法，而所謂的 mode 就是不同的情境，比方說，如果選擇了 `videoRecording`，用手機拍片的模式，那就會變成盡可能要把什麼聲音（包括噪音）都錄進來，顯然就不是我們想要的錄音模式。比較適合像是 `voiceChat` 或是 `videoChat` 這種假設用戶是手持手機，跟用戶保持一個距離的錄音模式，而在 iOS 12 之後，蘋果特定針對語音識別的情境，加上了 [voicePrompt](https://developer.apple.com/documentation/avfaudio/avaudiosession/mode/2962803-voiceprompt) mode。
+或著，在一些系統中，我們可以透過設定一些系統消除噪音，以 iOS 為例，我們可以對 [AVAudioSession](https://developer.apple.com/documentation/avfaudio/avaudiosession) 設定不同的 [mode](https://developer.apple.com/documentation/avfaudio/avaudiosession/mode)，iOS 會在設定不同的 mode 之後，套用不同的消噪的演算法，而所謂的 mode 就是不同的情境，比方說，如果選擇了 `videoRecording`，用手機拍片的模式，那就會變成盡可能要把什麼聲音（包括噪音）都錄進來，顯然就不是我們想要的錄音模式。比較適合像是 `voiceChat` 或是 `videoChat` 這種假設使用者是手持手機，跟使用者保持一個距離的錄音模式，而在 iOS 12 之後，蘋果特定針對語音識別的情境，加上了 [voicePrompt](https://developer.apple.com/documentation/avfaudio/avaudiosession/mode/2962803-voiceprompt) mode。
 
 而如果需要更進接的消噪，那大概得具有消噪技術的供應商了。
 
@@ -31,6 +31,8 @@
 在我們這次的示範中，使用的 ASR 引擎會用到網路識別，像是，speech_to_text 在 iOS 上用到了蘋果的 API，而蘋果的實作是用到了他們的網路服務，而 NLU、NLG 引擎，則是用到了 Gemini API。只要是透過網路傳輸資料，自然就會有延遲（Latency），這個延遲會影響到使用者的體驗—使用者會因為等待而煩躁，像是使用者只需要說一聲「對」或「好」，之後卻需要好幾秒的等待，才會進入下一步。
 
 針對一些短句，我們或許需要做一些最佳化，消除使用者的等待時間。比方說，在收到 ASR 結果之後，我們先用一個簡單的字串表格，與 ASR 結果比對一輪，如果發現是一些明確的短句，那也就不用去使用線上的 NLU 分析功能。另外，ASR 引擎通常會在使用者講完話之後，大概等待幾秒鐘，確定使用者真的講完了，但是，如果我們一開始就知道，語音引擎現在期待的就是講一些「好」、「是」、「確定」或「取消」等短句，我們可以不用做這樣的等待，只要收到了符合的辨識結果，就馬上進入下一步對話流程。
+
+另外，您也可能會有在完全不連網的狀況下，需要一套語音助理。那麼，這裡所打造出的方案，就完全不適用了。
 
 ## 其他
 

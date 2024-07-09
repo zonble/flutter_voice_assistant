@@ -272,6 +272,7 @@ class DialogEngine implements VuiFlowDelegate {
         return true;
       })
     ]);
+    await engine.init();
     await engine.handleInput('我想請假');
     await Future.delayed(const Duration(seconds: 5));
     await engine.handleInput('明天下午我想出去玩');
@@ -279,3 +280,11 @@ class DialogEngine implements VuiFlowDelegate {
     expect(systemCallCalled, isTrue);
   });
 ```
+
+在這個整合測試當中，我們也示範了怎樣從外部建立我們的對話引擎的作法。
+
+- 首先建立對話引擎的 instance，當中選擇了我們要使用的 ASR、NLU、NLG、TTS 引擎
+- 對引擎註冊我們要使用的 VUI flow。
+- 初始化對話引擎
+
+之後，我們透過 `handleInput` 測試，在實際的 app 中，我們則用 `start` method 來啟動對話引擎。

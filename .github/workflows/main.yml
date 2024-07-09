@@ -44,7 +44,7 @@ jobs:
         run: |
           sh gendoc.sh
           mkdocs gh-deploy --force --clean --verbose
-          sh indexnow.sh
+          # sh indexnow.sh
       - name: Add generated binary to artifact
         uses: actions/upload-artifact@v3
         with:
