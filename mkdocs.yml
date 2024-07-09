@@ -33,9 +33,9 @@ markdown_extensions:
   - footnotes
 
 plugins:
+  # - social:
+  #     cards_font: Noto Sans TC
   - search
-  - social:
-      cards_font: Noto Sans TC
   - with-pdf:
       copyright: 2024 © 楊維中 a.k.a zonble
       author: 楊維中 a.k.a zonble
@@ -74,3 +74,4 @@ nav:
   - "confirm_cancel.md"
   - "challenges.md"
   - "next_steps.md"
+  - "PDF 版本": flutter_voice_assistant.pdf

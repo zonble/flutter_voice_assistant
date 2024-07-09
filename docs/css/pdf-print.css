@@ -64,3 +64,9 @@
     max-height: 50%;
   }
 }
+
+pre {
+  font-size: 10pt;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
