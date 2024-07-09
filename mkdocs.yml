@@ -57,5 +57,6 @@ nav:
   - "asr_tts_engine.md"
   - "vui_flow_design.md"
   - "vui_flow_impl.md"
+  - "dialog_engine.md"
   - "challenges.md"
   - "next_steps.md"

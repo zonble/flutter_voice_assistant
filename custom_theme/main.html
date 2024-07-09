@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block site_meta %}
+{{ super() }}
+{% if page and page.meta.keywords %}
+<meta name="keywords" content="{{ page.meta.keywords }}"> {% endif %}
+{% endblock %}
+
+{% block analytics %}
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8E46WKE3L0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-8E46WKE3L0');
+</script>
+{% endblock %}
