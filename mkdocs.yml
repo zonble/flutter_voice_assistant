@@ -50,7 +50,7 @@ plugins:
       cover_subtitle: 使用 Flutter 所提供的套件以及 Gemini 打造自己的語音助理
       toc_title: 目錄
       output_path: flutter_voice_assistant.pdf
-      debug_html: true
+      # debug_html: true
   - plantuml:
       puml_url: https://www.plantuml.com/plantuml/
       num_workers: 8
