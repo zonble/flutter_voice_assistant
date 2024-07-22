@@ -20,7 +20,7 @@
 
 <video controls width="500">
   <source src="flutter_voice_assistant.mov" type="video/mp4" />
-  Download the <a href="flutter_voice_assistant.mov">MP4</a> video.
+  在 PDF 檔案中，無法呈現影片，請下載 <a href="https://zonble.github.io/flutter_voice_assistant/flutter_voice_assistant.mov">MP4</a> 影片。
 </video>
 
 隨著這幾年 Flutter 應用程式的開發框架愈來愈成熟，加上大型語言模型（LLM）也快速普及，結合這兩者，其實就可以只寫大約幾百行的 Dart 程式，就能夠快速打造跨平台的語音助理。在這本小冊子中，會提到:

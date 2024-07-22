@@ -204,3 +204,80 @@ class GeminiNlgEngine extends NlgEngine {
 甚至，我們可以根據使用者講的不同內容，請 Gemini 提供 UI 配色的建議。
 
 ![在 Gemini 中提供 UI 建議](images/nlu7.png)
+
+## ChatGPT
+
+我們也可以使用 ChatGPT，實作 NLU 與 NLG 引擎。以下是以 ChatGPT 實作 NLG 引擎的範例：
+
+```dart
+import 'dart:convert';
+import 'package:dart_openai/dart_openai.dart';
+import '../interface/nlu_engine.dart';
+
+class ChatgptNluEngine extends NluEngine {
+  final String chatGptModel;
+
+  /// Creates a new instance.
+  ChatgptNluEngine({
+    this.chatGptModel = "gpt-3.5-turbo-1106",
+  });
+
+  @override
+  Future<bool> init() async => true;
+
+  @override
+  Future<NluIntent> extractIntent(String utterance,
+      {String? currentIntent, String? additionalRequirement}) async {
+    var systemPrompt = "return any message you are given as JSON.";
+    if (currentIntent != null) {
+      systemPrompt += "The current indent is $currentIntent.";
+    }
+    systemPrompt +=
+        "Valid intents are including: ${availableIntents.join(',')}.";
+    systemPrompt += "Valid slots are including: ${availableSlots.join(',')}.";
+    systemPrompt += "Intents are in Pascal case.";
+    systemPrompt += "If the intent is not in the valid intents, return null.";
+    if (additionalRequirement != null) {
+      systemPrompt += additionalRequirement;
+    }
+
+    final systemMessage = OpenAIChatCompletionChoiceMessageModel(content: [
+      OpenAIChatCompletionChoiceMessageContentItemModel.text(systemPrompt),
+    ], role: OpenAIChatMessageRole.assistant);
+
+    var prompt =
+        'Extract the intent and the slots for the sentence:\n\n$utterance\n\n';
+
+    final userMessage = OpenAIChatCompletionChoiceMessageModel(content: [
+      OpenAIChatCompletionChoiceMessageContentItemModel.text(prompt)
+    ], role: OpenAIChatMessageRole.user);
+
+    final requestMessages = [
+      systemMessage,
+      userMessage,
+    ];
+
+    final chatCompletion = await OpenAI.instance.chat.create(
+      model: chatGptModel,
+      responseFormat: {"type": "json_object"},
+      seed: 6,
+      messages: requestMessages,
+      temperature: 0.2,
+      maxTokens: 500,
+    );
+
+    final responseText =
+        chatCompletion.choices.first.message.content?.first.text;
+    if (responseText is! String) {
+      throw Exception('Failed to extract message from chat completion.');
+    }
+    final map = json.decode(responseText);
+    final intent = NluIntent.fromMap(map);
+    return intent;
+  }
+
+  @override
+  bool get isInitialized => true;
+}
+
+```
