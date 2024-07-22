@@ -1,0 +1,843 @@
+
+<!doctype html>
+<html lang="zh-TW" class="no-js">
+  <head>
+    
+
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="使用 Flutter 所提供的套件以及 Gemini 打造自己的語音助理">
+      
+      
+      
+        <link rel="canonical" href="https://zonble.github.io/flutter_voice_assistant/vui_flow_design/">
+      
+      
+        <link rel="prev" href="../asr_tts_engine/">
+      
+      
+        <link rel="next" href="../vui_flow_impl/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.28">
+    
+
+
+    
+      
+        <title>設計語音互動流程 - 使用 Flutter 打造語音助理</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Lato";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../css/extra.css">
+    
+      <link rel="stylesheet" href="../css/pdf-print.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8E46WKE3L0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-76PF4YVNE4');
+</script>
+
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="設計語音互動流程 - 使用 Flutter 打造語音助理" >
+      
+        <meta  property="og:description"  content="使用 Flutter 所提供的套件以及 Gemini 打造自己的語音助理" >
+      
+        <meta  property="og:image"  content="https://zonble.github.io/flutter_voice_assistant/assets/images/social/vui_flow_design.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://zonble.github.io/flutter_voice_assistant/vui_flow_design/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="設計語音互動流程 - 使用 Flutter 打造語音助理" >
+      
+        <meta  name="twitter:description"  content="使用 Flutter 所提供的套件以及 Gemini 打造自己的語音助理" >
+      
+        <meta  name="twitter:image"  content="https://zonble.github.io/flutter_voice_assistant/assets/images/social/vui_flow_design.png" >
+      
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="pink">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳轉到
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="頁首">
+    <a href=".." title="使用 Flutter 打造語音助理" class="md-header__button md-logo" aria-label="使用 Flutter 打造語音助理" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            使用 Flutter 打造語音助理
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              設計語音互動流程
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="pink"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="pink"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜尋" placeholder="搜尋" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="搜尋">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清除" aria-label="清除" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜尋引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/zonble/flutter_voice_assistant" title="前往倉庫" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    zonble/flutter_voice_assistant
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="導覽列" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="使用 Flutter 打造語音助理" class="md-nav__button md-logo" aria-label="使用 Flutter 打造語音助理" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    使用 Flutter 打造語音助理
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/zonble/flutter_voice_assistant" title="前往倉庫" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    zonble/flutter_voice_assistant
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    前言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chatbot_vs_assistant/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    聊天機器人與語音助理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    語音助理的基本組成
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    可用的 Flutter 套件
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nlg_nlg_gemini/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    讓 Gemini 成為 NLU 與 NLG 引擎
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../asr_tts_engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    實作 ASR 與 TTS 引擎
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    設計語音互動流程
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    設計語音互動流程
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目錄">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目錄
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      語音流程的輸入與輸出
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vui-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      繪製 VUI flow 流程圖
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vui-flow_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      VUI flow 的介面
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vui_flow_impl/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    實作語音互動流程
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dialog_engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    實作完整的對話引擎
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../confirm_cancel/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    確認與取消
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../challenges/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    開發語音應用的挑戰
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../next_steps/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    下一步
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flutter_voice_assistant.pdf" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PDF 版本
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目錄">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目錄
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      語音流程的輸入與輸出
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vui-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      繪製 VUI flow 流程圖
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vui-flow_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      VUI flow 的介面
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="_1">設計語音互動流程</h1>
+<p><img alt="封面" src="../images/vui_flow_design.jpg" /></p>
+<p>在透過 NLU 引擎了解使用者的意圖之後，我們就可以開始嘗試達成對應的任務。我們的對話引擎平時維持一份意圖與流程之間的表格，收到意圖之後，就從表格中取出這段流程執行。</p>
+<h2 id="_2">語音流程的輸入與輸出</h2>
+<p>一段語音互動的流程，可能會被稱做 Dialog，在英文中，Dialog 與 Conversation 的意義不太一樣，雖然在中文中都叫做對話，但 Dialog 更具備一種事先安排好，是在劇本當中安排好的兩個角色之間的談話，比起 Conversation，更貼近語音助理要完成任務的過程。也可能稱作 VUI flow，VUI 是 Voice User Interface 的縮寫。以下我們統稱 VUI flow。</p>
+<p>一段 VUI flow 會以一個意圖開始，在設計上，我們就不太能夠讓多段不同的 VUI flow 對應到同一個意圖上，而是一個 VUI flow，會根據傳入的 Slots 以及當前的系統狀態，走進同一個 VUI flow 的不同分支。而要完成任務，往往會需要一些必須的 Slot，像是導航就會需要知道目的地，訂餐就會需要品項與數量等。</p>
+<p>同時，也可能會有一些非必要的 Slot，但會決定我們如何執行任務，像是導航的語音命令中，可能會多出一個途經點或是迴避點的選項，使用者可能會說「導航到台北動物園，中途經過加油站，但是想辦法避開塞車路段，不要走國道」這樣複雜的句子。遇到必要的 Slot，我們大概就要進入多輪對話追問使用者，一段 VUI flow，可說就是在蒐集必要的 Slot 的過程。</p>
+<p>之後，這段流程往往需要知道一些外部狀態，像是執行前述的導航流程時，我們可能就會想知道目前系統是否已經在導航中，向使用者確認是否需要停止目前的導航工作，如果確定要終止目前的導航，我們才會執行新的導航。</p>
+<p>這種向外部詢問狀態，或是要求外部執行工作的呼叫，通常叫做 System Call。這些 System Call 通常也是語音開發者與 App 開發者之間溝通的介面，語音開發者專注在 VUI flow 的設計與開發，不用關心實際上導航這部份的細節，而 App 開發者也只要專心在這些 System Call 的實作。最後，無論成功或失敗，我們可以回應使用者一段 TTS，最後結束對話。TTS 可以是一段固定的文字，也可以交給 NLG 引擎產生，另外，也可能用一小段音效—像是嗶嗶聲—代替。</p>
+<p>所以，我們可以分析出，一段語音互動流程，有著以下的輸入與輸出:</p>
+<p>輸入</p>
+<ul>
+<li>Intent</li>
+<li>Slots (必要與非必要)</li>
+<li>獲取外部狀態的 System Call</li>
+</ul>
+<p>輸出</p>
+<ul>
+<li>執行工作的 System Call</li>
+<li>TTS 回應，或是用一些替代的音效</li>
+<li>該結束對話，還是該進入下一輪對話，而下一輪對話該是哪個 VUI flow</li>
+</ul>
+<h2 id="vui-flow">繪製 VUI flow 流程圖</h2>
+<p>根據上述的輸入與輸出，我們通朝用 UML 當中的 <a href="https://en.wikipedia.org/wiki/Activity_diagram">Activity Diagram</a>，表現對話過程中會有哪些分支。以下以上述的導航流程為例：</p>
+<div class="puml"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1120px" preserveAspectRatio="true" style="background: #ffffff" version="1.1" viewBox="0 0 622 1120" width="622px" zoomAndPan="magnify"><defs/><g><text fill="#888888" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="59.9999" x="549.9864" y="19.2822">導航語音流程</text><ellipse cx="242.8506" cy="32.6406" fill="#222222" rx="10" ry="10" style="stroke:#222222;stroke-width:1.0;"/><rect fill="#F1F1F1" height="33.9688" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="92.0005" x="196.8503" y="62.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="72.0005" x="206.8503" y="83.7793">收到導航意圖</text><polygon fill="#F1F1F1" points="175.5619,183.5625,310.1393,183.5625,322.1393,195.5625,310.1393,207.5625,175.5619,207.5625,163.5619,195.5625,175.5619,183.5625" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="134.5774" x="175.5619" y="199.3706">Slot 是否包含導航目的地？</text><rect fill="#F1F1F1" height="47.9375" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="182.1357" x="346.1393" y="106.6094"/><ellipse cx="361.6393" cy="123.0781" fill="#000000" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:0.0;"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="150.1357" x="368.1393" y="127.748">TTS: 請問你要導航的終點？</text><ellipse cx="361.6393" cy="137.0469" fill="#000000" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:0.0;"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="72.0005" x="368.1393" y="141.7168">重新開始辨識</text><rect fill="#F1F1F1" height="47.9375" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="242.1361" x="121.7825" y="287.5742"/><ellipse cx="137.2825" cy="304.043" fill="#000000" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:0.0;"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="210.1361" x="143.7825" y="308.7129">TTS: 系統已經在導航中，是否要終止？</text><ellipse cx="137.2825" cy="318.0117" fill="#000000" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:0.0;"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="72.0005" x="143.7825" y="322.6816">繼續開始辨識</text><rect fill="#F1F1F1" height="33.9688" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="92.0005" x="196.8503" y="355.5117"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="72.0005" x="206.8503" y="376.6504">收到導航意圖</text><polygon fill="#F1F1F1" points="176.8511,476.4336,308.8501,476.4336,320.8501,488.4336,308.8501,500.4336,176.8511,500.4336,164.8511,488.4336,176.8511,476.4336" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="131.9991" x="176.8511" y="492.2417">可以取得確認或取消的意圖</text><rect fill="#F1F1F1" height="47.9375" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="242.1361" x="344.8501" y="399.4805"/><ellipse cx="360.3501" cy="415.9492" fill="#000000" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:0.0;"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="210.1361" x="366.8501" y="420.6191">TTS: 系統已經在導航中，是否要終止？</text><ellipse cx="360.3501" cy="429.918" fill="#000000" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:0.0;"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="72.0005" x="366.8501" y="434.5879">重新開始辨識</text><polygon fill="#F1F1F1" points="204.3509,520.4336,281.3503,520.4336,293.3503,532.4336,281.3503,544.4336,204.3509,544.4336,192.3509,532.4336,204.3509,520.4336" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="76.9995" x="204.3509" y="536.2417">分辨使用者意圖</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="54.9996" x="137.3512" y="529.8394">意圖是確認</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="54.9996" x="293.3503" y="529.8394">意圖是取消</text><rect fill="#F1F1F1" height="33.9688" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="122.1353" x="88.8995" y="554.4336"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="102.1353" x="98.8995" y="575.5723">TTS: 已經終止導航</text><rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:0.5;" width="233.3984" x="33.268" y="608.4023"/><line style="stroke:#181818;stroke-width:0.5;" x1="38.268" x2="38.268" y1="608.4023" y2="642.3711"/><line style="stroke:#181818;stroke-width:0.5;" x1="261.6664" x2="261.6664" y1="608.4023" y2="642.3711"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="213.3984" x="43.268" y="629.541">System Call: onUserStopNavigating</text><rect fill="#F1F1F1" height="33.9688" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="98.1351" x="286.6664" y="554.4336"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="78.1351" x="296.6664" y="575.5723">TTS: 繼續導航</text><rect fill="#F1F1F1" height="33.9688" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="92.0005" x="289.7337" y="608.4023"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="72.0005" x="299.7337" y="629.541">送出結束對話</text><ellipse cx="335.734" cy="672.3711" fill="none" rx="10" ry="10" style="stroke:#222222;stroke-width:1.5;"/><line style="stroke:#222222;stroke-width:2.5;" x1="329.5468" x2="341.9212" y1="666.1839" y2="678.5583"/><line style="stroke:#222222;stroke-width:2.5;" x1="341.9212" x2="329.5468" y1="666.1839" y2="678.5583"/><polygon fill="#F1F1F1" points="141.1006,227.5625,344.6006,227.5625,356.6006,245.3672,344.6006,263.1719,141.1006,263.1719,129.1006,245.3672,141.1006,227.5625" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="19.2178" x="246.8506" y="273.3823">Yes</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="131.9991" x="141.1006" y="237.7729">系統是否已經在導航狀態？</text><line style="stroke:#181818;stroke-width:1.0;" x1="129.1006" x2="356.6006" y1="245.3672" y2="245.3672"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="203.5" x="141.1006" y="260.5776">System Call: onCheckingIfNavigating</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="14.9585" x="356.6006" y="242.7729">No</text><polygon fill="#F1F1F1" points="242.8506,702.3711,254.8506,714.3711,242.8506,726.3711,230.8506,714.3711,242.8506,702.3711" style="stroke:#181818;stroke-width:0.5;"/><polygon fill="#F1F1F1" points="170.062,746.3711,315.6392,746.3711,327.6392,758.3711,315.6392,770.3711,170.062,770.3711,158.062,758.3711,170.062,746.3711" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="145.5773" x="170.062" y="762.1792">Slot 是否有途經點或迴避點？</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="19.2178" x="138.8442" y="755.7769">Yes</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="14.9585" x="327.6392" y="755.7769">No</text><rect fill="#F1F1F1" height="33.9688" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="263.0891" x="11" y="780.3711"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="243.0891" x="21" y="801.5098">TTS: 開始導航，同時會經過 XXX、避開 XXX</text><rect fill="#F1F1F1" height="33.9688" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="98.1351" x="294.0891" y="780.3711"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="78.1351" x="304.0891" y="801.5098">TTS: 開始導航</text><polygon fill="#F1F1F1" points="242.8506,820.3398,254.8506,832.3398,242.8506,844.3398,230.8506,832.3398,242.8506,820.3398" style="stroke:#181818;stroke-width:0.5;"/><rect fill="#F1F1F1" height="33.9688" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="170.1357" x="157.7828" y="937.1563"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="150.1357" x="167.7828" y="958.2949">TTS: 很抱歉，路經規劃失敗</text><polygon fill="#F1F1F1" points="135.0662,864.3398,350.635,864.3398,362.635,888.5469,350.635,912.7539,135.0662,912.7539,123.0662,888.5469,135.0662,864.3398" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="14.9585" x="246.8506" y="922.9644">No</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="98.9993" x="135.0662" y="874.5503">路經規劃是否成功？</text><line style="stroke:#181818;stroke-width:1.0;" x1="126.24" x2="359.4612" y1="882.1445" y2="882.1445"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="215.5688" x="135.0662" y="897.355">System Call: onNavigateToDestination|</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="3.4966" x="135.0662" y="910.1597"> </text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="19.2178" x="362.635" y="885.9526">Yes</text><polygon fill="#F1F1F1" points="242.8506,991.125,254.8506,1003.125,242.8506,1015.125,230.8506,1003.125,242.8506,991.125" style="stroke:#181818;stroke-width:0.5;"/><rect fill="#F1F1F1" height="33.9688" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="92.0005" x="196.8503" y="1035.125"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="72.0005" x="206.8503" y="1056.2637">送出結束對話</text><ellipse cx="242.8506" cy="1099.0938" fill="none" rx="10" ry="10" style="stroke:#222222;stroke-width:1.5;"/><line style="stroke:#222222;stroke-width:2.5;" x1="236.6634" x2="249.0378" y1="1092.9066" y2="1105.2809"/><line style="stroke:#222222;stroke-width:2.5;" x1="249.0378" x2="236.6634" y1="1092.9066" y2="1105.2809"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="96.6094" y2="183.5625"/><polygon fill="#181818" points="238.8506,173.5625,242.8506,183.5625,246.8506,173.5625,242.8506,177.5625" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="322.1393" x2="437.2071" y1="195.5625" y2="195.5625"/><line style="stroke:#181818;stroke-width:1.0;" x1="437.2071" x2="437.2071" y1="154.5469" y2="195.5625"/><polygon fill="#181818" points="433.2071,164.5469,437.2071,154.5469,441.2071,164.5469,437.2071,160.5469" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="437.2071" x2="437.2071" y1="79.625" y2="106.6094"/><line style="stroke:#181818;stroke-width:1.0;" x1="437.2071" x2="288.8509" y1="79.625" y2="79.625"/><polygon fill="#181818" points="298.8509,75.625,288.8509,79.625,298.8509,83.625,294.8509,79.625" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="42.6406" y2="62.6406"/><polygon fill="#181818" points="238.8506,52.6406,242.8506,62.6406,246.8506,52.6406,242.8506,56.6406" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="389.4805" y2="476.4336"/><polygon fill="#181818" points="238.8506,466.4336,242.8506,476.4336,246.8506,466.4336,242.8506,470.4336" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="320.8501" x2="465.9182" y1="488.4336" y2="488.4336"/><line style="stroke:#181818;stroke-width:1.0;" x1="465.9182" x2="465.9182" y1="447.418" y2="488.4336"/><polygon fill="#181818" points="461.9182,457.418,465.9182,447.418,469.9182,457.418,465.9182,453.418" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="465.9182" x2="465.9182" y1="372.4961" y2="399.4805"/><line style="stroke:#181818;stroke-width:1.0;" x1="465.9182" x2="288.8509" y1="372.4961" y2="372.4961"/><polygon fill="#181818" points="298.8509,368.4961,288.8509,372.4961,298.8509,376.4961,294.8509,372.4961" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="335.5117" y2="355.5117"/><polygon fill="#181818" points="238.8506,345.5117,242.8506,355.5117,246.8506,345.5117,242.8506,349.5117" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="149.9672" x2="149.9672" y1="588.4023" y2="608.4023"/><polygon fill="#181818" points="145.9672,598.4023,149.9672,608.4023,153.9672,598.4023,149.9672,602.4023" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="335.734" x2="335.734" y1="588.4023" y2="608.4023"/><polygon fill="#181818" points="331.734,598.4023,335.734,608.4023,339.734,598.4023,335.734,602.4023" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="335.734" x2="335.734" y1="642.3711" y2="662.3711"/><polygon fill="#181818" points="331.734,652.3711,335.734,662.3711,339.734,652.3711,335.734,656.3711" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="192.3509" x2="149.9672" y1="532.4336" y2="532.4336"/><line style="stroke:#181818;stroke-width:1.0;" x1="149.9672" x2="149.9672" y1="532.4336" y2="554.4336"/><polygon fill="#181818" points="145.9672,544.4336,149.9672,554.4336,153.9672,544.4336,149.9672,548.4336" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="293.3503" x2="335.734" y1="532.4336" y2="532.4336"/><line style="stroke:#181818;stroke-width:1.0;" x1="335.734" x2="335.734" y1="532.4336" y2="554.4336"/><polygon fill="#181818" points="331.734,544.4336,335.734,554.4336,339.734,544.4336,335.734,548.4336" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="149.9672" x2="149.9672" y1="642.3711" y2="687.3711"/><line style="stroke:#181818;stroke-width:1.0;" x1="149.9672" x2="242.8506" y1="687.3711" y2="687.3711"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="687.3711" y2="702.3711"/><polygon fill="#181818" points="238.8506,692.3711,242.8506,702.3711,246.8506,692.3711,242.8506,696.3711" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="500.4336" y2="520.4336"/><polygon fill="#181818" points="238.8506,510.4336,242.8506,520.4336,246.8506,510.4336,242.8506,514.4336" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="263.1719" y2="287.5742"/><polygon fill="#181818" points="238.8506,277.5742,242.8506,287.5742,246.8506,277.5742,242.8506,281.5742" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="356.6006" x2="596.9863" y1="245.3672" y2="245.3672"/><polygon fill="#181818" points="592.9863,485.5469,596.9863,495.5469,600.9863,485.5469,596.9863,489.5469" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="596.9863" x2="596.9863" y1="245.3672" y2="714.3711"/><line style="stroke:#181818;stroke-width:1.0;" x1="596.9863" x2="254.8506" y1="714.3711" y2="714.3711"/><polygon fill="#181818" points="264.8506,710.3711,254.8506,714.3711,264.8506,718.3711,260.8506,714.3711" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="207.5625" y2="227.5625"/><polygon fill="#181818" points="238.8506,217.5625,242.8506,227.5625,246.8506,217.5625,242.8506,221.5625" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="158.062" x2="142.5445" y1="758.3711" y2="758.3711"/><line style="stroke:#181818;stroke-width:1.0;" x1="142.5445" x2="142.5445" y1="758.3711" y2="780.3711"/><polygon fill="#181818" points="138.5445,770.3711,142.5445,780.3711,146.5445,770.3711,142.5445,774.3711" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="327.6392" x2="343.1566" y1="758.3711" y2="758.3711"/><line style="stroke:#181818;stroke-width:1.0;" x1="343.1566" x2="343.1566" y1="758.3711" y2="780.3711"/><polygon fill="#181818" points="339.1566,770.3711,343.1566,780.3711,347.1566,770.3711,343.1566,774.3711" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="142.5445" x2="142.5445" y1="814.3398" y2="832.3398"/><line style="stroke:#181818;stroke-width:1.0;" x1="142.5445" x2="230.8506" y1="832.3398" y2="832.3398"/><polygon fill="#181818" points="220.8506,828.3398,230.8506,832.3398,220.8506,836.3398,224.8506,832.3398" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="343.1566" x2="343.1566" y1="814.3398" y2="832.3398"/><line style="stroke:#181818;stroke-width:1.0;" x1="343.1566" x2="254.8506" y1="832.3398" y2="832.3398"/><polygon fill="#181818" points="264.8506,828.3398,254.8506,832.3398,264.8506,836.3398,260.8506,832.3398" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="726.3711" y2="746.3711"/><polygon fill="#181818" points="238.8506,736.3711,242.8506,746.3711,246.8506,736.3711,242.8506,740.3711" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="912.7539" y2="937.1563"/><polygon fill="#181818" points="238.8506,927.1563,242.8506,937.1563,246.8506,927.1563,242.8506,931.1563" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="362.635" x2="374.635" y1="888.5469" y2="888.5469"/><polygon fill="#181818" points="370.635,938.0371,374.635,948.0371,378.635,938.0371,374.635,942.0371" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="374.635" x2="374.635" y1="888.5469" y2="1003.125"/><line style="stroke:#181818;stroke-width:1.0;" x1="374.635" x2="254.8506" y1="1003.125" y2="1003.125"/><polygon fill="#181818" points="264.8506,999.125,254.8506,1003.125,264.8506,1007.125,260.8506,1003.125" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="971.125" y2="991.125"/><polygon fill="#181818" points="238.8506,981.125,242.8506,991.125,246.8506,981.125,242.8506,985.125" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="844.3398" y2="864.3398"/><polygon fill="#181818" points="238.8506,854.3398,242.8506,864.3398,246.8506,854.3398,242.8506,858.3398" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="1015.125" y2="1035.125"/><polygon fill="#181818" points="238.8506,1025.125,242.8506,1035.125,246.8506,1025.125,242.8506,1029.125" style="stroke:#181818;stroke-width:1.0;"/><line style="stroke:#181818;stroke-width:1.0;" x1="242.8506" x2="242.8506" y1="1069.0938" y2="1089.0938"/><polygon fill="#181818" points="238.8506,1079.0938,242.8506,1089.0938,246.8506,1079.0938,242.8506,1083.0938" style="stroke:#181818;stroke-width:1.0;"/></g></svg></div>
+
+<p>在設計一個 VUI flow 時，我們通常也會附上如何啟動這個流程、滿足可以車取出意圖的例句（Utterance），方便日後的測試以及功能驗證。像是：</p>
+<ul>
+<li>開始導航</li>
+<li>我想要去台北動物園</li>
+<li>帶我去動物園，不要上高架橋…</li>
+</ul>
+<p>在上圖中，可以注意到，其實這張圖是多個 VUI flow 組成的，中間有一段確認是否要終止導航的流程，就是以「確認」、「取消」等意圖，開啟一段新的 VUI flow。</p>
+<p>這個時候，通常會預期只會收到在限制範圍內的意圖，但使用者的行為可能千奇百怪—舉另外一個例子，如果是一套點餐系統，當使用者說「我要點餐」時，我們可能會回應「您想點什麼」，並且預期收到「我要一碗牛肉麵」這樣的回答，但使用者可能會說「有什麼可以點的」，這時候我們可能選擇回覆「我們不理解你的意圖」，或是必須再設計一條分支，念出一些熱門的餐點，然後再問一次想點什麼餐點。流程應該怎麼設計，最後還是要回歸使用者到底怎麼使用，以及團隊的使用者研究的結果。</p>
+<h2 id="vui-flow_1">VUI flow 的介面</h2>
+<p>在實際進入撰寫 VUI flow 之前，我們先設計一個屬於所有 VUI flow 的介面。</p>
+<div class="language-dart highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">VuiFlow</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">handle</span><span class="p">(</span><span class="n">NluIntent</span><span class="w"> </span><span class="n">intent</span><span class="p">);</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cancel</span><span class="p">()</span><span class="w"> </span><span class="kd">async</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">delegate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="n">VuiFlowDelegate</span><span class="o">?</span><span class="w"> </span><span class="n">delegate</span><span class="p">;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="kt">String</span><span class="w"> </span><span class="kd">get</span><span class="w"> </span><span class="n">intent</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="w"> </span><span class="kd">get</span><span class="w"> </span><span class="n">slots</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">[];</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="kt">String</span><span class="o">?</span><span class="w"> </span><span class="kd">get</span><span class="w"> </span><span class="n">additionalNluPrompt</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>這個介面分成三個部分：</p>
+<ul>
+<li>這個 VUI flow 實際上的工作：當我們要使用這個 VUI flow 時，會去呼叫 <code>handle</code> 這個 method</li>
+<li>這個 VUI flow 所需要的外部相依：集中在 delegate 中</li>
+<li>其他的 metadata：包括什麼意圖會進入這個 VUI flow，期待收到哪些 Slot，以及是否需要額外的 LLM Prompt 協助抽取 Slot</li>
+</ul>
+<p>在 delegate 中，我們定義了一個 VUI flow 怎麼在中途使用 TTS 引擎與 NLG 引擎，而如果他需要進入另外一輪的對話，可以用 <code>onSettingCurrentVuiFlow</code> 指定下一個 VUI flow 是什麼，並且用 <code>onStartingAsr</code> 重新開始 ASR 識別。另外，就是一個用來結束對話的 <code>onEndingConversation</code>。</p>
+<div class="language-dart highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">VuiFlowDelegate</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">onPlayingPrompt</span><span class="p">(</span><span class="kt">String</span><span class="w"> </span><span class="n">prompt</span><span class="p">);</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">onSettingCurrentVuiFlow</span><span class="p">(</span><span class="n">VuiFlow</span><span class="o">?</span><span class="w"> </span><span class="n">vuiFlow</span><span class="p">);</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">onStartingAsr</span><span class="p">();</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">onEndingConversation</span><span class="p">();</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="n">Future</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">?&gt;</span><span class="w"> </span><span class="n">onGeneratingResponse</span><span class="p">(</span><span class="kt">String</span><span class="w"> </span><span class="n">utterance</span><span class="p">,</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="p">{</span><span class="kt">bool</span><span class="w"> </span><span class="n">useDefaultPrompt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">});</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>另外，使用者可能隨時取消目前正在進行中的 VUI flow，像是在執行到一半的時候，就按下退出語音助理的按鈕，不但直接關閉 ASR 識別與 TTS 語音，也需要取消正在 <code>handle</code> method 中執行的工作。如果要做完整的取消的話，那每個 VUI flow 中，都需要一個叫做 cancelled 的變數，當這個變數為 true 時，<code>handle</code> 裡頭每一行，都要檢查 cancelled 是不是已經變成 true，如果是，就要退出。</p>
+<p>在這邊先用了一個偷懶的辦法：只要把 delegate 設成 null 之後，這個 VUI flow 就不會有對外的聯繫。也不會繼續有 ASR 識別與 TTS 語音，不過 <code>handle</code> 其實還是會繼續往下執行。</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      2024 and onwards © Weizhong Yang a.k.a zonble
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/zonble" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/zonble" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections", "navigation.tracking", "navigation.instant"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u8907\u88fd", "clipboard.copy": "\u8907\u88fd", "search.result.more.one": "\u6b64\u9801\u5c1a\u6709 1 \u500b\u7b26\u5408\u7684\u9805\u76ee", "search.result.more.other": "\u6b64\u9801\u5c1a\u6709 # \u500b\u7b26\u5408\u7684\u9805\u76ee", "search.result.none": "\u6c92\u6709\u7b26\u5408\u7684\u9805\u76ee", "search.result.one": "\u627e\u5230 1 \u500b\u7b26\u5408\u7684\u9805\u76ee", "search.result.other": "\u627e\u5230 # \u500b\u7b26\u5408\u7684\u9805\u76ee", "search.result.placeholder": "\u6253\u5b57\u9032\u884c\u641c\u5c0b", "search.result.term.missing": "\u7f3a\u5c11\u5b57\u8a5e", "select.version": "\u9078\u64c7\u7248\u672c"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+    
+  </body>
+</html>
